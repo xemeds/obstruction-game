@@ -137,7 +137,7 @@ void user_move() {
 	{
 		// Get the move
 		printf("\t\t\t\t\t> ");
-		scanf("%s", move);
+		scanf("%2s", move);
 
 		// Check the syntax
 		int len = strlen(move);
