@@ -22,7 +22,7 @@ After that, build and run with
 
 	$ ./obstruction
 
-# Referances
+# References
 
 Description and Images of the game: www.papg.com
 
