@@ -6,6 +6,9 @@
 
 #define BOARD_SIZE 6
 
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 char board[BOARD_SIZE][BOARD_SIZE];
 
 // Clears the screen
@@ -113,83 +116,10 @@ int check_board() {
 // Places a move on the board
 void place_move(char symbol, int x, int y) {
 	// Place the neighbors
-	// Corners
-	if ((x == 0 && y == 0))
-	{
-		board[0][1] = '#';
-		board[1][0] = '#';
-		board[1][1] = '#';
-	}
-	else if ((x == BOARD_SIZE - 1 && y == 0))
-	{
-		board[0][BOARD_SIZE - 2] = '#';
-		board[1][BOARD_SIZE - 1] = '#';
-		board[1][BOARD_SIZE - 2] = '#';
-	}
-	else if ((x == 0 && y == BOARD_SIZE - 1))
-	{
-		board[BOARD_SIZE - 2][0] = '#';
-		board[BOARD_SIZE - 1][1] = '#';
-		board[BOARD_SIZE - 2][1] = '#';
-	}
-	else if ((x == BOARD_SIZE - 1 && y == BOARD_SIZE - 1))
-	{
-		board[BOARD_SIZE - 2][BOARD_SIZE - 1] = '#';
-		board[BOARD_SIZE - 1][BOARD_SIZE - 2] = '#';
-		board[BOARD_SIZE - 2][BOARD_SIZE - 2] = '#';
-	}
-
-	// Edges
-	else if (x == 0)
-	{
-		for (int j = y - 1; j < y + 2; j++)
-		{
-			for (int i = x; i < x + 2; i++)
-			{
-				board[j][i] = '#';
-			}
-		}
-	}
-	else if (x == BOARD_SIZE - 1)
-	{
-		for (int j = y - 1; j < y + 2; j++)
-		{
-			for (int i = x - 1; i < x + 1; i++)
-			{
-				board[j][i] = '#';
-			}
-		}
-	}
-	else if (y == 0)
-	{
-		for (int j = y; j < y + 2; j++)
-		{
-			for (int i = x - 1; i < x + 2; i++)
-			{
-				board[j][i] = '#';
-			}
-		}
-	}
-	else if (y == BOARD_SIZE - 1)
-	{
-		for (int j = y - 1; j < y + 1; j++)
-		{
-			for (int i = x - 1; i < x + 2; i++)
-			{
-				board[j][i] = '#';
-			}
-		}
-	}
-
-	// Normal
-	else
-	{
-		for (int j = y - 1; j < y + 2; j++)
-		{
-			for (int i = x - 1; i < x + 2; i++)
-			{
-				board[j][i] = '#';
-			}
+	// By Reddit user btwiusearch
+	for (int i = MAX(y - 1, 0); i < MIN(y + 2, BOARD_SIZE); i++) {
+		for (int j = MAX(x - 1, 0); j < MIN(x + 2, BOARD_SIZE); j++) {
+			board[i][j] = '#';
 		}
 	}
 
