@@ -129,7 +129,7 @@ void place_move(char symbol, int x, int y) {
 
 // Gets a valid user input and sends it to be placed on the board
 void user_move() {
-	char move[2];
+	char move[3];
 	int x, y;
 
 	// Loop untill a valid move is given
