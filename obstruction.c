@@ -228,7 +228,6 @@ void user_move() {
 			case 'c' :
 				x = 2;
 				break;
-				break;
 			case 'd' :
 				x = 3;
 				break;
