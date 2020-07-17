@@ -14,11 +14,17 @@ For a better experience use a terminal size of 88x25 and a font size of 12.
 
 You will need a standards-compliant C compiler, the standard C library with header files, and make. On Debian GNU/Linux and derivatives, you can install these with
 
-	$ apt-get install build-essential
+	$ apt install build-essential
 
-After that, build and run with
+After that clone the repository and cd into it
 
-	$ make obstruction
+	$ git clone https://github.com/xemeds/obstruction-game.git
+
+	$ cd obstruction-game
+
+Build and run with
+
+	$ make
 
 	$ ./obstruction
 
