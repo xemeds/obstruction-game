@@ -148,46 +148,9 @@ void user_move() {
 		}
 
 		// Convert the move into integers
-		switch(move[0]) {
-			case 'a' :
-				x = 0;
-				break;
-			case 'b' :
-				x = 1;
-				break;
-			case 'c' :
-				x = 2;
-				break;
-			case 'd' :
-				x = 3;
-				break;
-			case 'e' :
-				x = 4;
-				break;
-			case 'f' :
-				x = 5;
-				break;
-		}
-		switch(move[1]) {
-			case '1' :
-				y = 0;
-				break;
-			case '2' :
-				y = 1;
-				break;
-			case '3' :
-				y = 2;
-				break;
-			case '4' :
-				y = 3;
-				break;
-			case '5' :
-				y = 4;
-				break;
-			case '6' :
-				y = 5;
-				break;
-		}
+		// By Reddit user timeforscience
+		x = move[0] - 'a';
+		y = move[1] - '1';
 
 		// Check if the moves location is empty
 		if (board[y][x] != ' ')
