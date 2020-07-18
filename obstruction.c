@@ -139,10 +139,10 @@ void place_move(char symbol, int x, int y) {
 			board[i][j] = BLOCKED;
 		}
 	}
-	if (symbol == X) {
+	if (symbol == 'X') {
 		board[y][x] = PLAYER_A;
 	}
-	if (symbol == X) {
+	if (symbol == 'O') {
 		board[y][x] = PLAYER_B;
 	}
 }
