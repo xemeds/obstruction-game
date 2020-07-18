@@ -81,18 +81,23 @@ void print_board() {
 		printf("\033[32m║");
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
-			if (board[y][x] == 'X')
+			if (board[y][x] == 'X') {
 				printf("\033[34m\033[1m %c ", board[y][x]);
-			else if (board[y][x] == 'O')
+			}
+			else if (board[y][x] == 'O') {
 				printf("\033[31m\033[1m %c ", board[y][x]);
-			else
+			}
+			else {
 				printf("\033[0m\033[1m %c ", board[y][x]);
-			if (x != BOARD_SIZE - 1)
+			}
+			if (x != BOARD_SIZE - 1) {
 				printf("\033[32m│");
+			}
 		}
 		printf("\033[32m║\n");
-		if (y != BOARD_SIZE - 1)
+		if (y != BOARD_SIZE - 1) {
 			printf("\t\t\t\t╟───┼───┼───┼───┼───┼───╢\n");
+		}
 	}
 	printf("\t\t\t\t╚═══╧═══╧═══╧═══╧═══╧═══╝\n\n");
 	printf("\033[0m\033[1m");
@@ -106,8 +111,9 @@ int check_board() {
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
-			if (board[y][x] == ' ')
+			if (board[y][x] == ' ') {
 				can_play = 1;
+			}
 		}
 	}
 	return can_play;
@@ -141,8 +147,7 @@ void user_move() {
 
 		// Check the syntax
 		int len = strlen(move);
-		if (!(len == 2) || !(97 <= move[0] && move[0] <= 102) || !(49 <= move[1] && move[1] <= 54))
-		{
+		if (!(len == 2) || !(97 <= move[0] && move[0] <= 102) || !(49 <= move[1] && move[1] <= 54)) {
 			print_board();
 			continue;
 		}
@@ -153,8 +158,7 @@ void user_move() {
 		y = move[1] - '1';
 
 		// Check if the moves location is empty
-		if (board[y][x] != ' ')
-		{
+		if (board[y][x] != ' ') {
 			print_board();
 			continue;
 		}
@@ -176,8 +180,9 @@ void bot_move() {
 	{
 		for (int i = 0; i < BOARD_SIZE; i++)
 		{
-			if (board[j][i] == ' ')
+			if (board[j][i] == ' ') {
 				empty_cells++;
+			}
 		}
 	}
 
