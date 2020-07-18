@@ -141,7 +141,7 @@ void user_move() {
 
 		// Check the syntax
 		int len = strlen(move);
-		if (!(len == 2) || !(97 <= move[0] && move[0] <= 102) || !(49 <= move[1] && move[1] <= 54))
+		if (!(len == 2) || !('a' <= move[0] && move[0] <= 'f') || !('1' <= move[1] && move[1] <= '6'))
 		{
 			print_board();
 			continue;
