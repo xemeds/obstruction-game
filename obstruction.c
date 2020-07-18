@@ -3,13 +3,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define BOARD_SIZE 6
-
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
-char board[BOARD_SIZE][BOARD_SIZE];
+#define BOARD_SIZE 6
+
+typedef enum eBoardState {
+	FREE,
+	PLAYER_A,
+	PLAYER_B,
+	BLOCKED
+} BoardState;
+BoardState board[BOARD_SIZE][BOARD_SIZE];
 
 // Clears the screen
 void clear() {
@@ -61,7 +66,7 @@ void init_board() {
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
-			board[y][x] = ' ';
+			board[y][x] = FREE;
 		}
 	}
 }
@@ -81,12 +86,24 @@ void print_board() {
 		printf("\033[32m║");
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
-			if (board[y][x] == 'X')
-				printf("\033[34m\033[1m %c ", board[y][x]);
-			else if (board[y][x] == 'O')
-				printf("\033[31m\033[1m %c ", board[y][x]);
-			else
-				printf("\033[0m\033[1m %c ", board[y][x]);
+			switch(board[y][x]) {
+				case PLAYER_A:
+					printf("\033[34m\033[1m X ");
+					break;
+				case PLAYER_B:
+					printf("\033[31m\033[1m O ");
+					break;
+				case FREE:
+					printf("\033[0m\033[1m   ";
+					break;
+				case BLOCKED:
+					printf("\033[0m\033[1m # ");
+					break;
+				default:
+					printf("For the night is dark and full of terror\n");
+					printf("PANIC!!!!\n");
+					break;
+			}
 			if (x != BOARD_SIZE - 1)
 				printf("\033[32m│");
 		}
@@ -106,7 +123,7 @@ int check_board() {
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
-			if (board[y][x] == ' ')
+			if (board[y][x] == )
 				can_play = 1;
 		}
 	}
@@ -119,12 +136,15 @@ void place_move(char symbol, int x, int y) {
 	// By Reddit user btwiusearch
 	for (int i = MAX(y - 1, 0); i < MIN(y + 2, BOARD_SIZE); i++) {
 		for (int j = MAX(x - 1, 0); j < MIN(x + 2, BOARD_SIZE); j++) {
-			board[i][j] = '#';
+			board[i][j] = BLOCKED;
 		}
 	}
-
-	// Place the symbol
-	board[y][x] = symbol;
+	if (symbol == X) {
+		board[y][x] = PLAYER_A;
+	}
+	if (symbol == X) {
+		board[y][x] = PLAYER_B;
+	}
 }
 
 // Gets a valid user input and sends it to be placed on the board
@@ -153,7 +173,7 @@ void user_move() {
 		y = move[1] - '1';
 
 		// Check if the moves location is empty
-		if (board[y][x] != ' ')
+		if (board[y][x] != FREE)
 		{
 			print_board();
 			continue;
@@ -176,7 +196,7 @@ void bot_move() {
 	{
 		for (int i = 0; i < BOARD_SIZE; i++)
 		{
-			if (board[j][i] == ' ')
+			if (board[j][i] == FREE)
 				empty_cells++;
 		}
 	}
@@ -190,7 +210,7 @@ void bot_move() {
 	{
 		for (int i = 0; i < BOARD_SIZE; i++)
 		{
-			if (board[j][i] == ' ')
+			if (board[j][i] == FREE)
 			{
 				cell++;
 				if (cell == random_cell)
