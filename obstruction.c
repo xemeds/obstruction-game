@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
@@ -10,10 +11,11 @@
 
 typedef enum eBoardState {
 	FREE,
-	PLAYER_A,
-	PLAYER_B,
+	PLAYER_X,
+	PLAYER_O,
 	BLOCKED
 } BoardState;
+
 BoardState board[BOARD_SIZE][BOARD_SIZE];
 
 // Clears the screen
@@ -87,21 +89,17 @@ void print_board() {
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
 			switch(board[y][x]) {
-				case PLAYER_A:
+				case PLAYER_X:
 					printf("\033[34m\033[1m X ");
 					break;
-				case PLAYER_B:
+				case PLAYER_O:
 					printf("\033[31m\033[1m O ");
 					break;
 				case FREE:
-					printf("\033[0m\033[1m   ";
+					printf("\033[0m\033[1m   ");
 					break;
 				case BLOCKED:
 					printf("\033[0m\033[1m # ");
-					break;
-				default:
-					printf("For the night is dark and full of terror\n");
-					printf("PANIC!!!!\n");
 					break;
 			}
 			if (x != BOARD_SIZE - 1)
@@ -123,7 +121,7 @@ int check_board() {
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
-			if (board[y][x] == )
+			if (board[y][x] == FREE)
 				can_play = 1;
 		}
 	}
@@ -139,12 +137,13 @@ void place_move(char symbol, int x, int y) {
 			board[i][j] = BLOCKED;
 		}
 	}
-	if (symbol == 'X') {
-		board[y][x] = PLAYER_A;
-	}
-	if (symbol == 'O') {
-		board[y][x] = PLAYER_B;
-	}
+
+	// Place the symbols
+	if (symbol == 'X') 
+		board[y][x] = PLAYER_X;
+
+	if (symbol == 'O')
+		board[y][x] = PLAYER_O;
 }
 
 // Gets a valid user input and sends it to be placed on the board
