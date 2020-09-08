@@ -9,6 +9,15 @@
 
 #define BOARD_SIZE 6
 
+#define CLI_RESET "\033[0m"
+#define CLI_BOLD "\033[1m"
+#define CLI_UNDERLINE "\033[4m"
+#define CLI_CYAN "\033[36m"
+#define CLI_BOLD_YELLOW "\033[1;33m"
+#define CLI_BOLD_BLUE "\033[1;34m"
+#define CLI_BOLD_RED "\033[1;31m"
+#define CLI_BOLD_GREEN "\033[1;32m"
+
 typedef enum eBoardState {
 	FREE,
 	PLAYER_X,
@@ -25,14 +34,14 @@ void clear() {
 
 // Prints the ASCII art
 void print_art() {
-	printf("\033[0;36m");
+	printf(CLI_CYAN);
 	printf("░█████╗░██████╗░░██████╗████████╗██████╗░██╗░░░██╗░█████╗░████████╗██╗░█████╗░███╗░░██╗\n");
 	printf("██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║\n");
 	printf("██║░░██║██████╦╝╚█████╗░░░░██║░░░██████╔╝██║░░░██║██║░░╚═╝░░░██║░░░██║██║░░██║██╔██╗██║\n");
 	printf("██║░░██║██╔══██╗░╚═══██╗░░░██║░░░██╔══██╗██║░░░██║██║░░██╗░░░██║░░░██║██║░░██║██║╚████║\n");
 	printf("╚█████╔╝██████╦╝██████╔╝░░░██║░░░██║░░██║╚██████╔╝╚█████╔╝░░░██║░░░██║╚█████╔╝██║░╚███║\n");
-	printf("░╚════╝░╚═════╝░╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░╚═════╝░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝\n");
-	printf("\033[0m\n");
+	printf("░╚════╝░╚═════╝░╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░╚═════╝░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝\n\n");
+	printf(CLI_RESET CLI_BOLD);
 }
 
 // Introduction to the game
@@ -41,23 +50,20 @@ void intro() {
 	print_art();
 
 	// Intro
-	printf("\n");
-	printf("\033[33m\033[4m\033[1mDescription:\n");
-	printf("\033[0m\033[1m");
-	printf("\nThe game is played on a grid of 6 x 6. Your symbol is '\033[34m\033[1mX\033[0m\033[1m' and the bots symbol is '\033[31m\033[1mO\033[0m\033[1m'.\n");
+	printf(CLI_BOLD_YELLOW CLI_UNDERLINE "\nDescription:\n\n");
+	printf(CLI_RESET CLI_BOLD "The game is played on a grid of 6 x 6. ");
+	printf("Your symbol is '" CLI_BOLD_BLUE "X" CLI_RESET CLI_BOLD "' and the bots symbol is '" CLI_BOLD_RED "O" CLI_RESET CLI_BOLD "'.\n");
 	printf("You and the bot take turns writing your symbols in a cell. The restriction is that\n");
 	printf("you can only play in a cell if all its neighbours are empty.\n");
 	printf("Further explanation: www.papg.com/show?2XMX\n");
 	printf("\n");
-	printf("\033[33m\033[4m\033[1mGoal:");
-	printf("\033[0m\033[1m Leave no place for the bot to move.\n");
-	printf("\n");
-	printf("\033[33m\033[1mTo write your symbol in a cell you must specify the location.\n");
-	printf("\033[33m\033[1mEx:");
-	printf("\033[0m\033[1m a1 c4 b6\n");
+	printf(CLI_BOLD_YELLOW CLI_UNDERLINE "Goal:" CLI_RESET CLI_BOLD " Leave no place for the bot to move.\n\n");
+	printf(CLI_BOLD_YELLOW "To write your symbol in a cell you must specify the location.\n");
+	printf(CLI_BOLD_YELLOW "Ex:");
+	printf(CLI_RESET CLI_BOLD " a1 c4 b6\n\n");
 
 	// Start
-	printf("\nPress Enter to start...\n");
+	printf("Press Enter to start...\n");
 	printf("> ");
 	getchar();
 }
@@ -77,40 +83,39 @@ void init_board() {
 void print_board() {
 	clear();
 	print_art();
-	printf("\033[0m\033[1m");
 	printf("\t\t\t\t  a   b   c   d   e   f\n");
-	printf("\033[32m");
+	printf(CLI_BOLD_GREEN);
 	printf("\t\t\t\t╔═══╤═══╤═══╤═══╤═══╤═══╗\n");
 	for (int y = 0; y < BOARD_SIZE; y++)
 	{
-		printf("\033[0m\033[1m");
+		printf(CLI_RESET CLI_BOLD);
 		printf("\t\t\t      %i ", y + 1);
-		printf("\033[32m║");
+		printf(CLI_BOLD_GREEN "║");
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
 			switch(board[y][x]) {
 				case PLAYER_X:
-					printf("\033[34m\033[1m X ");
+					printf(CLI_BOLD_BLUE " X ");
 					break;
 				case PLAYER_O:
-					printf("\033[31m\033[1m O ");
+					printf(CLI_BOLD_RED " O ");
 					break;
 				case FREE:
-					printf("\033[0m\033[1m   ");
+					printf("   ");
 					break;
 				case BLOCKED:
-					printf("\033[0m\033[1m # ");
+					printf(CLI_RESET CLI_BOLD " # ");
 					break;
 			}
 			if (x != BOARD_SIZE - 1)
-				printf("\033[32m│");
+				printf(CLI_BOLD_GREEN "│");
 		}
-		printf("\033[32m║\n");
+		printf(CLI_BOLD_GREEN "║\n");
 		if (y != BOARD_SIZE - 1)
 			printf("\t\t\t\t╟───┼───┼───┼───┼───┼───╢\n");
 	}
 	printf("\t\t\t\t╚═══╧═══╧═══╧═══╧═══╧═══╝\n\n");
-	printf("\033[0m\033[1m");
+	printf(CLI_RESET CLI_BOLD);
 	printf("\t\t\t==+==+==+==+==+==+==+==+==+==+==+==+==+==\n\n");
 }
 
@@ -244,7 +249,9 @@ int main () {
 		// Check if the user has places left to play
 		if (!check_board())
 		{
-			printf("\033[33m\033[1m\t\t\t\t\tYou lose.\033[0m\n\n");
+			printf(CLI_BOLD_YELLOW);
+			printf("\t\t\t\t\tYou lose.\n\n");
+			printf(CLI_RESET);
 			break;
 		}
 
@@ -257,7 +264,9 @@ int main () {
 		// Check if the bot has places left to play
 		if (!check_board())
 		{
-			printf("\033[33m\033[1m\t\t\t\t\tYou win.\033[0m\n\n");
+			printf(CLI_BOLD_YELLOW);
+			printf("\t\t\t\t\tYou win.\n\n");
+			printf(CLI_RESET);
 			break;
 		}
 
