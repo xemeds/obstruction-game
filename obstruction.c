@@ -35,12 +35,10 @@ void clear() {
 // Prints the ASCII art
 void print_art() {
 	printf(CLI_CYAN);
-	printf("░█████╗░██████╗░░██████╗████████╗██████╗░██╗░░░██╗░█████╗░████████╗██╗░█████╗░███╗░░██╗\n");
-	printf("██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║\n");
-	printf("██║░░██║██████╦╝╚█████╗░░░░██║░░░██████╔╝██║░░░██║██║░░╚═╝░░░██║░░░██║██║░░██║██╔██╗██║\n");
-	printf("██║░░██║██╔══██╗░╚═══██╗░░░██║░░░██╔══██╗██║░░░██║██║░░██╗░░░██║░░░██║██║░░██║██║╚████║\n");
-	printf("╚█████╔╝██████╦╝██████╔╝░░░██║░░░██║░░██║╚██████╔╝╚█████╔╝░░░██║░░░██║╚█████╔╝██║░╚███║\n");
-	printf("░╚════╝░╚═════╝░╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░╚═════╝░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝\n\n");
+	printf("\n");
+	printf("\t      █▀▀█ █▀▀▄ █▀▀ ▀▀█▀▀ █▀▀█ █░░█ █▀▀ ▀▀█▀▀ ░▀░ █▀▀█ █▀▀▄\n");
+	printf("\t      █░░█ █▀▀▄ ▀▀█ ░░█░░ █▄▄▀ █░░█ █░░ ░░█░░ ▀█▀ █░░█ █░░█\n");
+	printf("\t      ▀▀▀▀ ▀▀▀░ ▀▀▀ ░░▀░░ ▀░▀▀ ░▀▀▀ ▀▀▀ ░░▀░░ ▀▀▀ ▀▀▀▀ ▀░░▀\n\n");
 	printf(CLI_RESET CLI_BOLD);
 }
 
@@ -50,20 +48,18 @@ void intro() {
 	print_art();
 
 	// Intro
-	printf(CLI_BOLD_YELLOW CLI_UNDERLINE "\nDescription:\n\n");
+	printf(CLI_BOLD_YELLOW CLI_UNDERLINE "\n\nDescription:\n");
 	printf(CLI_RESET CLI_BOLD "The game is played on a grid of 6 x 6. ");
-	printf("Your symbol is '" CLI_BOLD_BLUE "X" CLI_RESET CLI_BOLD "' and the bots symbol is '" CLI_BOLD_RED "O" CLI_RESET CLI_BOLD "'.\n");
-	printf("You and the bot take turns writing your symbols in a cell. The restriction is that\n");
-	printf("you can only play in a cell if all its neighbours are empty.\n");
-	printf("Further explanation: www.papg.com/show?2XMX\n");
-	printf("\n");
+	printf("Your symbol is '" CLI_BOLD_BLUE "X" CLI_RESET CLI_BOLD "' and the bots symbol is '" CLI_BOLD_RED "O" CLI_RESET CLI_BOLD "'. ");
+	printf("You and the bot take turns writing your symbols in a cell. The restriction is that you can only play in a cell if all its neighbours are empty.\n");
+	printf("Further explanation: www.papg.com/show?2XMX\n\n");
 	printf(CLI_BOLD_YELLOW CLI_UNDERLINE "Goal:" CLI_RESET CLI_BOLD " Leave no place for the bot to move.\n\n");
 	printf(CLI_BOLD_YELLOW "To write your symbol in a cell you must specify the location.\n");
 	printf(CLI_BOLD_YELLOW "Ex:");
 	printf(CLI_RESET CLI_BOLD " a1 c4 b6\n\n");
 
 	// Start
-	printf("Press Enter to start...\n");
+	printf("Press enter to start...\n");
 	printf("> ");
 	getchar();
 }
@@ -82,14 +78,15 @@ void init_board() {
 // Prints the board
 void print_board() {
 	clear();
+	printf(CLI_RESET);
 	print_art();
-	printf("\t\t\t\t  a   b   c   d   e   f\n");
+	printf("\t\t\t      a   b   c   d   e   f\n");
 	printf(CLI_BOLD_GREEN);
-	printf("\t\t\t\t╔═══╤═══╤═══╤═══╤═══╤═══╗\n");
+	printf("\t\t\t    ╔═══╤═══╤═══╤═══╤═══╤═══╗\n");
 	for (int y = 0; y < BOARD_SIZE; y++)
 	{
 		printf(CLI_RESET CLI_BOLD);
-		printf("\t\t\t      %i ", y + 1);
+		printf("\t\t\t  %i ", y + 1);
 		printf(CLI_BOLD_GREEN "║");
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
@@ -112,11 +109,11 @@ void print_board() {
 		}
 		printf(CLI_BOLD_GREEN "║\n");
 		if (y != BOARD_SIZE - 1)
-			printf("\t\t\t\t╟───┼───┼───┼───┼───┼───╢\n");
+			printf("\t\t\t    ╟───┼───┼───┼───┼───┼───╢\n");
 	}
-	printf("\t\t\t\t╚═══╧═══╧═══╧═══╧═══╧═══╝\n\n");
+	printf("\t\t\t    ╚═══╧═══╧═══╧═══╧═══╧═══╝\n\n");
 	printf(CLI_RESET CLI_BOLD);
-	printf("\t\t\t==+==+==+==+==+==+==+==+==+==+==+==+==+==\n\n");
+	printf("\t\t    ==+==+==+==+==+==+==+==+==+==+==+==+==+==\n\n");
 }
 
 // Returns 0 if there are no places left to play
@@ -160,7 +157,7 @@ void user_move() {
 	while (1)
 	{
 		// Get the move
-		printf("\t\t\t\t\t> ");
+		printf("\t\t\t\t     > ");
 		scanf("%2s", move);
 
 		// Check the syntax
@@ -250,7 +247,7 @@ int main () {
 		if (!check_board())
 		{
 			printf(CLI_BOLD_YELLOW);
-			printf("\t\t\t\t\tYou lose.\n\n");
+			printf("\t\t\t\t     You lose.\n\n");
 			printf(CLI_RESET);
 			break;
 		}
@@ -265,7 +262,7 @@ int main () {
 		if (!check_board())
 		{
 			printf(CLI_BOLD_YELLOW);
-			printf("\t\t\t\t\tYou win.\n\n");
+			printf("\t\t\t\t     You win.\n\n");
 			printf(CLI_RESET);
 			break;
 		}

@@ -10,7 +10,7 @@ For example, in the following game player 'X' wins because 'O' has nowhere to pl
 
 # Build & Run
 
-For a better experience use a terminal size of 88x25 and a font size of 12.
+For a better experience use a terminal size of 80x24 and a font size of 12.
 
 You will need a standards-compliant C compiler, the standard C library with header files, and make. On Debian GNU/Linux and derivatives, you can install these with
 
