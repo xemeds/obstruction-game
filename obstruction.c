@@ -227,17 +227,8 @@ void bot_move() {
 	place_move('O', x, y);
 }
 
-int main () {
-	// Clear screen
-	clear();
-
-	// Print the intro
-	intro();
-
-	// Initialize the board
-	init_board();
-
-	// Main loop
+// Game loop
+void game_loop() {
 	while (1)
 	{
 		// Print the board
@@ -269,6 +260,60 @@ int main () {
 
 		// Bots move
 		bot_move();
+	}
+}
+
+// Checks if the user wants to play again
+int play_again() {
+	char input[2];
+
+	printf(CLI_BOLD);
+	printf("\t\t\t\t     R - Play\n");
+	printf("\t\t\t\t     Q - Quit\n\n");
+	printf("\t\t\t\t     > ");
+
+	scanf("%1s", input);
+	
+	// If the input is the letter R
+	if (input[0] == 'R' || input[0] == 'r') {
+		// Return 1 (true)
+		return 1;
+	}
+	// Else
+	else {
+		// Return 0 (false)
+		return 0;
+	}
+}
+
+int main () {
+	// Clear screen
+	clear();
+
+	// Print the intro
+	intro();
+
+	// Initialize the board
+	init_board();
+
+	// Main loop
+	while (1) {
+		// Game loop
+		game_loop();
+
+		// If the user wants to play again
+		if (play_again() == 1) {
+			// Initialize the board (reset it)
+			init_board();
+
+			// Game loop
+			game_loop();
+		}
+		// Else if the user does not want to play again
+		else {
+			// Break the loop
+			break;
+		}
 	}
 
 	return 0;
