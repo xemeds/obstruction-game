@@ -268,8 +268,8 @@ int play_again() {
 	char input[2];
 
 	printf(CLI_BOLD);
-	printf("\t\t\t\t     R - Play\n");
-	printf("\t\t\t\t     Q - Quit\n\n");
+	printf("\t\t\t\t    R - Replay\n");
+	printf("\t\t\t\t    Q - Quit\n\n");
 	printf("\t\t\t\t     > ");
 
 	scanf("%1s", input);
@@ -306,8 +306,6 @@ int main () {
 			// Initialize the board (reset it)
 			init_board();
 
-			// Game loop
-			game_loop();
 		}
 		// Else if the user does not want to play again
 		else {
