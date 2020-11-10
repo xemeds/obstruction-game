@@ -30,7 +30,7 @@ Build and run with
 
 # References
 
-Description and Images of the game: www.papg.com
+Description and Images of the game: [papg.com](http://www.papg.com/)
 
 # License
 
