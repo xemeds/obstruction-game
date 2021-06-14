@@ -28,14 +28,17 @@ typedef enum eBoardState {
 void clear();
 void print_title();
 void intro();
+bool get_play_against_bot();
+bool get_user_starts();
 void init_board(BoardState board[][BOARD_SIZE]);
 void print_board(BoardState board[][BOARD_SIZE]);
-bool check_board(BoardState board[][BOARD_SIZE]);
-void place_move(BoardState board[][BOARD_SIZE], char symbol, int x, int y);
+bool terminal_state(BoardState board[][BOARD_SIZE]);
+BoardState get_winner(BoardState board[][BOARD_SIZE]);
+BoardState get_player(BoardState board[][BOARD_SIZE]);
+void place_move(BoardState board[][BOARD_SIZE], BoardState player, int x, int y);
 void user_move(BoardState board[][BOARD_SIZE]);
 void bot_move(BoardState board[][BOARD_SIZE]);
-void print_win();
-void print_lose();
+void print_winner(BoardState board[][BOARD_SIZE]);
 bool play_again();
 
 #endif // OBSTRUCTION_H
