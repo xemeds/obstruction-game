@@ -1,11 +1,10 @@
-# Compiler
 CC=gcc
 
-# Target file name
-TARGET=obstruction
+TARGET=main
+COMMAND=obstruction.c main.c -o $(TARGET)
 
 all:
-	$(CC) obstruction.c -o $(TARGET)
+	$(CC) $(COMMAND)
 
 clean:
 	rm $(TARGET)

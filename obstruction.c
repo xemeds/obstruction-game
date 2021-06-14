@@ -1,39 +1,15 @@
-// Author: Muhammed Ali Dilek (xemeds)
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
-
-#define BOARD_SIZE 6
-
-#define CLI_RESET "\033[0m"
-#define CLI_BOLD "\033[1m"
-#define CLI_UNDERLINE "\033[4m"
-#define CLI_CYAN "\033[36m"
-#define CLI_BOLD_YELLOW "\033[1;33m"
-#define CLI_BOLD_BLUE "\033[1;34m"
-#define CLI_BOLD_RED "\033[1;31m"
-#define CLI_BOLD_GREEN "\033[1;32m"
-
-typedef enum eBoardState {
-	FREE,
-	PLAYER_X,
-	PLAYER_O,
-	BLOCKED
-} BoardState;
-
-BoardState board[BOARD_SIZE][BOARD_SIZE];
+#include "obstruction.h"
 
 // Clears the screen
 void clear() {
 	system("clear");
 }
 
-// Prints the ASCII art
-void print_art() {
+// Prints the ASCII art title
+void print_title() {
 	printf(CLI_CYAN);
 	printf("\n");
 	printf("\t      █▀▀█ █▀▀▄ █▀▀ ▀▀█▀▀ █▀▀█ █░░█ █▀▀ ▀▀█▀▀ ░▀░ █▀▀█ █▀▀▄\n");
@@ -44,8 +20,8 @@ void print_art() {
 
 // Introduction to the game
 void intro() {
-	// ASCII art
-	print_art();
+	// ASCII art title
+	print_title();
 
 	// Intro
 	printf(CLI_BOLD_YELLOW CLI_UNDERLINE "\n\nDescription:\n");
@@ -65,7 +41,7 @@ void intro() {
 }
 
 // Initializes the board
-void init_board() {
+void init_board(BoardState board[][BOARD_SIZE]) {
 	for (int y = 0; y < BOARD_SIZE; y++)
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
@@ -76,10 +52,10 @@ void init_board() {
 }
 
 // Prints the board
-void print_board() {
+void print_board(BoardState board[][BOARD_SIZE]) {
 	clear();
 	printf(CLI_RESET);
-	print_art();
+	print_title();
 	printf("\t\t\t      a   b   c   d   e   f\n");
 	printf(CLI_BOLD_GREEN);
 	printf("\t\t\t    ╔═══╤═══╤═══╤═══╤═══╤═══╗\n");
@@ -116,31 +92,29 @@ void print_board() {
 	printf("\t\t    ==+==+==+==+==+==+==+==+==+==+==+==+==+==\n\n");
 }
 
-// Returns 0 if there are no places left to play
-int check_board() {
-	int can_play = 0;
+// Returns true if there is a place left to play on the board, else returns false
+bool check_board(BoardState board[][BOARD_SIZE]) {
 	for (int y = 0; y < BOARD_SIZE; y++)
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
 			if (board[y][x] == FREE)
-				can_play = 1;
+				return true;
 		}
 	}
-	return can_play;
+	return false;
 }
 
 // Places a move on the board
-void place_move(char symbol, int x, int y) {
+void place_move(BoardState board[][BOARD_SIZE], char symbol, int x, int y) {
 	// Place the neighbors
-	// By Reddit user btwiusearch
 	for (int i = MAX(y - 1, 0); i < MIN(y + 2, BOARD_SIZE); i++) {
 		for (int j = MAX(x - 1, 0); j < MIN(x + 2, BOARD_SIZE); j++) {
 			board[i][j] = BLOCKED;
 		}
 	}
 
-	// Place the symbols
+	// Place the symbol
 	if (symbol == 'X') 
 		board[y][x] = PLAYER_X;
 
@@ -148,8 +122,8 @@ void place_move(char symbol, int x, int y) {
 		board[y][x] = PLAYER_O;
 }
 
-// Gets a valid user input and sends it to be placed on the board
-void user_move() {
+// Gets a valid user input and places it on the board
+void user_move(BoardState board[][BOARD_SIZE]) {
 	char move[3];
 	int x, y;
 
@@ -164,19 +138,18 @@ void user_move() {
 		int len = strlen(move);
 		if (!(len == 2) || !('a' <= move[0] && move[0] <= 'f') || !('1' <= move[1] && move[1] <= '6'))
 		{
-			print_board();
+			print_board(board);
 			continue;
 		}
 
 		// Convert the move into integers
-		// By Reddit user timeforscience
 		x = move[0] - 'a';
 		y = move[1] - '1';
 
 		// Check if the moves location is empty
 		if (board[y][x] != FREE)
 		{
-			print_board();
+			print_board(board);
 			continue;
 		}
 
@@ -185,11 +158,11 @@ void user_move() {
 	}
 
 	// Place the move
-	place_move('X', x, y);
+	place_move(board, 'X', x, y);
 }
 
 // Chooses a random empty cell and sends it to be placed on the board
-void bot_move() {
+void bot_move(BoardState board[][BOARD_SIZE]) {
 	int empty_cells = 0, x, y, random_cell;
 
 	// Find the amount of empty cells
@@ -224,47 +197,25 @@ void bot_move() {
 	}
 
 	// Place the bots move on that location
-	place_move('O', x, y);
+	place_move(board, 'O', x, y);
 }
 
-// Game loop
-void game_loop() {
-	while (1)
-	{
-		// Print the board
-		print_board();
+// Prints the win message
+void print_win() {
+	printf(CLI_BOLD_YELLOW);
+	printf("\t\t\t\t     You win.\n\n");
+	printf(CLI_RESET);
+}
 
-		// Check if the user has places left to play
-		if (!check_board())
-		{
-			printf(CLI_BOLD_YELLOW);
-			printf("\t\t\t\t     You lose.\n\n");
-			printf(CLI_RESET);
-			break;
-		}
-
-		// Users move
-		user_move();
-
-		// Print the board
-		print_board();
-
-		// Check if the bot has places left to play
-		if (!check_board())
-		{
-			printf(CLI_BOLD_YELLOW);
-			printf("\t\t\t\t     You win.\n\n");
-			printf(CLI_RESET);
-			break;
-		}
-
-		// Bots move
-		bot_move();
-	}
+// Prints the lose message
+void print_lose() {
+	printf(CLI_BOLD_YELLOW);
+	printf("\t\t\t\t     You lose.\n\n");
+	printf(CLI_RESET);
 }
 
 // Checks if the user wants to play again
-int play_again() {
+bool play_again() {
 	char input[2];
 
 	printf(CLI_BOLD);
@@ -276,43 +227,12 @@ int play_again() {
 	
 	// If the input is the letter R
 	if (input[0] == 'R' || input[0] == 'r') {
-		// Return 1 (true)
-		return 1;
+		// Return true
+		return true;
 	}
 	// Else
 	else {
-		// Return 0 (false)
-		return 0;
+		// Return false
+		return false;
 	}
-}
-
-int main () {
-	// Clear screen
-	clear();
-
-	// Print the intro
-	intro();
-
-	// Initialize the board
-	init_board();
-
-	// Main loop
-	while (1) {
-		// Game loop
-		game_loop();
-
-		// If the user wants to play again
-		if (play_again() == 1) {
-			// Initialize the board (reset it)
-			init_board();
-
-		}
-		// Else if the user does not want to play again
-		else {
-			// Break the loop
-			break;
-		}
-	}
-
-	return 0;
 }
