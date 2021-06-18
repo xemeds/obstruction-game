@@ -1,10 +1,17 @@
 CC=gcc
 
-TARGET=main
-COMMAND=obstruction.c main.c -o $(TARGET)
+main: minimax.o obstruction.o main.c
+	$(CXX) minimax.o obstruction.o main.c -o main
 
-all:
-	$(CC) $(COMMAND)
+minimax.o: minimax.c obstruction.o
+	$(CXX) -c minimax.c
+
+obstruction.o: obstruction.c
+	$(CXX) -c obstruction.c
 
 clean:
-	rm $(TARGET)
+	rm *.o
+	rm main
+
+run:
+	./main

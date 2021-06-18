@@ -78,8 +78,35 @@ bool get_user_starts() {
 	}
 }
 
-// Initializes the board
-void init_board(BoardState board[][BOARD_SIZE]) {
+// Returns the starting state of the board
+BoardState **get_board() {
+	// Allocate the new board
+	BoardState **board = (BoardState **)malloc(BOARD_SIZE * sizeof(BoardState *));
+
+	// Set all the cells to free
+	for (int y = 0; y < BOARD_SIZE; y++)
+	{
+		board[y] = (BoardState *)malloc(BOARD_SIZE * sizeof(BoardState));
+		for (int x = 0; x < BOARD_SIZE; x++)
+		{
+			board[y][x] = FREE;
+		}
+	}
+
+	return board;
+}
+
+// Frees a given board
+void free_board(BoardState **board) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		free(board[i]);
+	}
+
+	free(board);
+}
+
+// Resets a given board
+void reset_board(BoardState **board) {
 	for (int y = 0; y < BOARD_SIZE; y++)
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
@@ -90,7 +117,7 @@ void init_board(BoardState board[][BOARD_SIZE]) {
 }
 
 // Prints the board
-void print_board(BoardState board[][BOARD_SIZE]) {
+void print_board(BoardState **board) {
 	clear();
 	printf(CLI_RESET);
 	print_title();
@@ -130,36 +157,36 @@ void print_board(BoardState board[][BOARD_SIZE]) {
 	printf("\t\t    ==+==+==+==+==+==+==+==+==+==+==+==+==+==\n\n");
 }
 
-// Returns true if there is a place left to play on the board, else returns false
-bool terminal_state(BoardState board[][BOARD_SIZE]) {
+// Returns true if there are no more places left to play on the board, else returns false
+bool terminal_state(BoardState **board) {
 	for (int y = 0; y < BOARD_SIZE; y++)
 	{
 		for (int x = 0; x < BOARD_SIZE; x++)
 		{
 			if (board[y][x] == FREE)
-				return true;
+				return false;
 		}
 	}
-	return false;
+	return true;
 }
 
 // Returns the winner of the board
-BoardState get_winner(BoardState board[][BOARD_SIZE]) {
+BoardState get_winner(BoardState **board) {
 	BoardState player = get_player(board);
 	if (player == PLAYER_X)
 		return PLAYER_O;
-	else if (player == PLAYER_O)
+	else
 		return PLAYER_X;
 }
 
 // Returns the player who has the next turn on the board
-BoardState get_player(BoardState board[][BOARD_SIZE]) {
+BoardState get_player(BoardState **board) {
 	int x_count = 0, o_count = 0;
-	for (int x = 0; x < BOARD_SIZE; x++) {
-		for (int y = 0; y < BOARD_SIZE; y++) {
-			if (board[x][y] == PLAYER_X)
+	for (int y = 0; y < BOARD_SIZE; y++) {
+		for (int x = 0; x < BOARD_SIZE; x++) {
+			if (board[y][x] == PLAYER_X)
 				x_count++;
-			else if (board[x][y] == PLAYER_O)
+			else if (board[y][x] == PLAYER_O)
 				o_count++;
 		}
 	}
@@ -170,7 +197,7 @@ BoardState get_player(BoardState board[][BOARD_SIZE]) {
 }
 
 // Places a move on the board
-void place_move(BoardState board[][BOARD_SIZE], BoardState player, int x, int y) {
+void place_move(BoardState **board, BoardState player, int x, int y) {
 	// Place the neighbors
 	for (int i = MAX(y - 1, 0); i < MIN(y + 2, BOARD_SIZE); i++) {
 		for (int j = MAX(x - 1, 0); j < MIN(x + 2, BOARD_SIZE); j++) {
@@ -183,7 +210,7 @@ void place_move(BoardState board[][BOARD_SIZE], BoardState player, int x, int y)
 }
 
 // Gets a valid user input and places it on the board
-void user_move(BoardState board[][BOARD_SIZE]) {
+void user_move(BoardState **board) {
 	char move[3];
 	int x, y;
 
@@ -226,53 +253,22 @@ void user_move(BoardState board[][BOARD_SIZE]) {
 	place_move(board, get_player(board), x, y);
 }
 
-// Chooses a random empty cell and sends it to be placed on the board
-void bot_move(BoardState board[][BOARD_SIZE]) {
-	int empty_cells = 0, x, y, random_cell;
-
-	// Find the amount of empty cells
-	for (int j = 0; j < BOARD_SIZE; j++)
-	{
-		for (int i = 0; i < BOARD_SIZE; i++)
-		{
-			if (board[j][i] == FREE)
-				empty_cells++;
-		}
-	}
-
-	// Choose a random empty cell
-	random_cell = (999 % empty_cells) + 1;
-
-	// Find the random empty cells location
-	int cell = 0;
-	for (int j = 0; j < BOARD_SIZE; j++)
-	{
-		for (int i = 0; i < BOARD_SIZE; i++)
-		{
-			if (board[j][i] == FREE)
-			{
-				cell++;
-				if (cell == random_cell)
-				{
-					x = i;
-					y = j;
-				}
-			}
-		}
-	}
-
-	// Place the bots move on that location
-	place_move(board, get_player(board), x, y);
+// Prints the winner of the board
+void print_winner(BoardState **board) {
+	BoardState winner = get_winner(board);
+	printf(CLI_BOLD_YELLOW);
+	if (winner == PLAYER_X)
+		printf("\t\t\t\t PLayer " CLI_BOLD_BLUE "X" CLI_BOLD_YELLOW " wins.\n\n");
+	else if (winner == PLAYER_O)
+		printf("\t\t\t\t PLayer " CLI_BOLD_RED "O" CLI_BOLD_YELLOW " wins.\n\n");
+	printf(CLI_RESET);
 }
 
-// Prints the winner of the board
-void print_winner(BoardState board[][BOARD_SIZE]) {
+// Prints bot is thinking
+void print_bot_is_thinking() {
 	printf(CLI_BOLD_YELLOW);
-	if (get_winner(board) == PLAYER_X)
-		printf("\t\t\t\t  PLayer X wins.\n\n");
-	else if (get_winner(board) == PLAYER_O)
-		printf("\t\t\t\t  PLayer O wins.\n\n");
-	printf(CLI_RESET);
+	printf("\t\t\t       The bot is thinking...\n");
+	printf("\t  (it may take a little bit of time if it's the bots first move)\n\n");
 }
 
 // Checks if the user wants to play again
@@ -280,9 +276,9 @@ bool play_again() {
 	char input[2];
 
 	printf(CLI_BOLD);
-	printf("\t\t\t\t    R - Replay\n");
-	printf("\t\t\t\t    Q - Quit\n\n");
-	printf("\t\t\t\t     > ");
+	printf("\t\t\t\t   R - Replay\n");
+	printf("\t\t\t\t   Q - Quit\n\n");
+	printf("\t\t\t\t    > ");
 
 	scanf("%1s", input);
 	

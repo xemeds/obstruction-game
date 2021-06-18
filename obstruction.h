@@ -30,15 +30,17 @@ void print_title();
 void intro();
 bool get_play_against_bot();
 bool get_user_starts();
-void init_board(BoardState board[][BOARD_SIZE]);
-void print_board(BoardState board[][BOARD_SIZE]);
-bool terminal_state(BoardState board[][BOARD_SIZE]);
-BoardState get_winner(BoardState board[][BOARD_SIZE]);
-BoardState get_player(BoardState board[][BOARD_SIZE]);
-void place_move(BoardState board[][BOARD_SIZE], BoardState player, int x, int y);
-void user_move(BoardState board[][BOARD_SIZE]);
-void bot_move(BoardState board[][BOARD_SIZE]);
-void print_winner(BoardState board[][BOARD_SIZE]);
+BoardState **get_board();
+void free_board(BoardState **board);
+void reset_board(BoardState **board);
+void print_board(BoardState **board);
+bool terminal_state(BoardState **board);
+BoardState get_winner(BoardState **board);
+BoardState get_player(BoardState **board);
+void place_move(BoardState **board, BoardState player, int x, int y);
+void user_move(BoardState **board);
+void print_winner(BoardState **board);
+void print_bot_is_thinking();
 bool play_again();
 
 #endif // OBSTRUCTION_H
