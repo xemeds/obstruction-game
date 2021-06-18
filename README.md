@@ -1,10 +1,8 @@
 # How to play
 
-The game is played on a grid; 6 x 6 is a good size. One player is 'O' and the other is 'X'.
-Players take turns in writing their symbol in a cell. The restriction is that you can only play in a cell if all its neighbours are empty (shown shaded in the following diagrams).
-The first player unable to move loses.
+The game is played on a grid. First player is X and the second player is O. Both of the players take turns writing their symbols in a cell. When a player writes their symbol in a cell, the neighbours are blocked and the other player is not able to play on the blocked cells (shown shaded in the following diagrams). The goal of the game is to block all the cells and leave no place for the other player to move. The first player unable to move loses.
 
-For example, in the following game player 'X' wins because 'O' has nowhere to play:
+For example, in the following game player X wins because O has nowhere to play:
 
 ![alt text](http://www.papg.com/images/Obstruction.gif)
 
@@ -26,7 +24,7 @@ Build and run with
 
 	$ make
 
-	$ ./obstruction
+	$ ./main
 
 # References
 
